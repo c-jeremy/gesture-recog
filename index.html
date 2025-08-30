@@ -6,26 +6,28 @@
     <title>Gesture Controlled Page</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             transition: background-color 0.5s, color 0.5s;
-            line-height: 1.6;
+            line-height: 1.8;
+            scroll-behavior: smooth;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 2rem;
+            min-height: 200vh; /* Make page long enough to scroll */
         }
 
         /* Light and Dark Mode Themes */
         .light-mode {
-            background-color: #ffffff;
-            color: #333333;
+            background-color: #f4f4f4;
+            color: #2c3e50;
         }
 
         .dark-mode {
-            background-color: #333333;
-            color: #ffffff;
+            background-color: #2c3e50;
+            color: #f4f4f4;
         }
 
         /* Notification Styling */
@@ -33,45 +35,74 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #ffc107;
             color: #333;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: bold;
             z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        /* Hide the video element */
-        #webcam {
-            display: none;
+        /* Hide the video element by moving it off-screen */
+        #webcam-container {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
         }
     </style>
 </head>
 <body class="light-mode">
 
-    <div id="notification">Loading Gesture Model...</div>
-    <video id="webcam" autoplay playsinline></video>
+    <!-- This notification will be updated via JavaScript -->
+    <div id="notification">Loading Gesture Model... Please Wait.</div>
+
+    <!-- The video element is necessary for the webcam feed, but it's hidden from view -->
+    <div id="webcam-container">
+        <video id="webcam" autoplay playsinline></video>
+    </div>
 
     <div class="container">
-        <h1>A Seemingly Normal Web Page</h1>
+        <h1>An Interactive Web Page</h1>
+        <p>This page looks simple, but it has a secret. Once the gesture model loads, you can control it with your hand! You'll need to allow webcam access when prompted.</p>
+        <p><b>Gesture Controls:</b></p>
+        <ul>
+            <li>👍 <b>Thumb Up:</b> Scroll Down</li>
+            <li>☝️ <b>Pointing Up:</b> Scroll Up</li>
+            <li>✊ <b>Closed Fist:</b> Light Mode</li>
+            <li>🖐️ <b>Open Palm:</b> Dark Mode</li>
+        </ul>
+        <br/>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
-        <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Sorbi in harmonicas. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
-        <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Sorbi in harmonicas. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
-        <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Sorbi in harmonicas. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
+        <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Morbi pellentesque, mauris interdum porta tincidunt, neque orci molestie mauris, vitae iaculis dolor justo vitae magna. Quisque accumsan, quam eget consequat fermentum, lacus ligula venenatis sapien, ut commodo dui massa et metus. Proin vulputate, nunc vel cursus fermentum, nunc mi ultrices diam, at semper est nisi et ante. Fusce ac nulla ac nisi vulputate tincidunt. Suspendisse potenti. Nam pharetra, tortor eu iaculis rhoncus, purus magna congue justo, et iaculis eros libero et erat. In hac habitasse platea dictumst. Praesent sit amet quam. Fusce in enim et neque consequat cursus. Nunc mollis, orci ut semper mollis, lectus nulla varius turpis, non pulvinar urna est in orci. Nam pellentesque, massa in porta volutpat, velit sapien egestas augue, quis consectetuer neque leo et justo.</p>
+        <p>Duis ante. Nulla quam. Nulla facilisi. Praesent vitae magna. Vivamus aliquam, est at adipiscing fringilla, lorem justo consectetuer justo, vel interdum sapien diam ac odio. Cras lorem. Nunc quis mi. In hac habitasse platea dictumst. Vivamus sit amet enim. Integer a nibh. Aenean eget pede. Sed vel nunc. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Curabitur vel eros. Ut vitae erat. Vivamus ac pede. In hac habitasse platea dictumst. Phasellus ac libero. Nulla facilisi. Nulla facilisi. Pellentesque tincidunt. Cras purus. In hac habitasse platea dictumst. Aliquam nec pede.</p>
+        <p>Nullam eu pede. Nam consectetuer, augue et tempor consectetuer, mauris enim consectetuer mauris, vitae scelerisque pede justo ut tellus. Nulla quis justo. Sed consequat, nisl vitae tempus varius, sapien pede lobortis dolor, quis hendrerit purus arcu ac mauris. Etiam ac turpis. Fusce eget tellus. In hac habitasse platea dictumst. Vivamus lacus. Aliquam erat volutpat. Ut nonummy. Proin et arcu. Integer ac leo. Integer consectetuer, elit et consectetuer placerat, nulla nisl iaculis tellus, id consectetuer sapien eros et odio. Praesent nisi. Suspendisse potenti. Nam nonummy. Vivamus vel lorem. Nulla nec pede. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc ut quam. Duis in dolor.</p>
     </div>
 
     <script type="module">
-        import { GestureRecognizer, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.js";
-
-        let gestureRecognizer;
-        let lastGesture = "";
+        import { GestureRecognizer, FilesetResolver, DrawingUtils } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.js";
 
         const video = document.getElementById("webcam");
         const notification = document.getElementById("notification");
 
-        async function createGestureRecognizer() {
+        let gestureRecognizer;
+        let lastGesture = "";
+        let lastGestureTime = 0;
+        const gestureCooldown = 1000; // 1 second cooldown
+
+        // Function to update the notification text and fade it out
+        function showNotification(text) {
+            notification.textContent = text;
+            notification.style.opacity = 1;
+            setTimeout(() => {
+                notification.style.opacity = 0;
+            }, 2000); // Fade out after 2 seconds
+        }
+
+        // Create and initialize the Gesture Recognizer
+        async function setupGestureRecognizer() {
             const vision = await FilesetResolver.forVisionTasks(
                 "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
             );
@@ -80,49 +111,71 @@
                     modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
                     delegate: "GPU"
                 },
-                runningMode: "VIDEO"
+                runningMode: "VIDEO",
+                numHands: 1
             });
-            notification.textContent = "Ready for gestures!";
+            showNotification("✅ Model Loaded. Ready for gestures!");
+            enableWebcam();
         }
-        createGestureRecognizer();
+        setupGestureRecognizer();
 
-        // Get webcam access
-        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-            video.srcObject = stream;
-            video.addEventListener("loadeddata", predictWebcam);
-        });
+        // Enable the webcam and start predicting
+        function enableWebcam() {
+            navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+                video.srcObject = stream;
+                video.addEventListener("loadeddata", predictWebcam);
+            }).catch(err => {
+                console.error("getUserMedia error:", err);
+                showNotification("❌ Webcam access denied.");
+            });
+        }
 
+        let lastVideoTime = -1;
         function predictWebcam() {
-            if (gestureRecognizer) {
+            if (video.currentTime !== lastVideoTime) {
+                lastVideoTime = video.currentTime;
                 const results = gestureRecognizer.recognizeForVideo(video, Date.now());
+
                 if (results.gestures.length > 0) {
                     const currentGesture = results.gestures[0][0].categoryName;
-                    if (currentGesture !== lastGesture) {
+                    const currentTime = Date.now();
+
+                    // Apply a cooldown to prevent rapid-fire gesture changes
+                    if (currentGesture !== lastGesture && currentTime - lastGestureTime > gestureCooldown) {
                         handleGesture(currentGesture);
                         lastGesture = currentGesture;
+                        lastGestureTime = currentTime;
                     }
                 } else {
-                    lastGesture = "";
+                     lastGesture = ""; // Reset if no gesture is detected
                 }
             }
             window.requestAnimationFrame(predictWebcam);
         }
 
         function handleGesture(gesture) {
+            let gestureText = "";
             switch (gesture) {
                 case "Pointing_Up":
-                    window.scrollBy(0, -100);
+                    window.scrollBy(0, -300);
+                    gestureText = "Scrolling Up ☝️";
+                    break;
+                case "Thumb_Up":
+                    window.scrollBy(0, 300);
+                    gestureText = "Scrolling Down 👍";
                     break;
                 case "Closed_Fist":
                     document.body.className = "light-mode";
+                    gestureText = "Light Mode ✊";
                     break;
                 case "Open_Palm":
                     document.body.className = "dark-mode";
+                    gestureText = "Dark Mode 🖐️";
                     break;
-                case "Thumb_Up":
-                    window.scrollBy(0, 100);
-                    break;
+                default:
+                    return; // Do nothing for unrecognized gestures
             }
+            showNotification(gestureText);
         }
     </script>
 </body>
