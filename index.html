@@ -29,24 +29,50 @@
             background-color: #2c3e50;
             color: #f4f4f4;
         }
-
-        /* Notification Styling */
-        #notification {
+        
+        /* This container holds the button and notifications */
+        .controls-container {
             position: fixed;
             top: 20px;
             right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        /* Button to start the experience */
+        #startButton {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: none; /* Hidden until model is loaded */
+        }
+         #startButton:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Notification Styling */
+        #notification {
             padding: 12px 24px;
             background-color: #ffc107;
             color: #333;
             border-radius: 8px;
             font-weight: bold;
-            z-index: 1000;
-            opacity: 1;
+            opacity: 0;
             transition: opacity 0.5s;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        /* Hide the video element by moving it off-screen */
+        /* Hide the video element completely by moving it off-screen */
         #webcam-container {
             position: absolute;
             top: -9999px;
@@ -56,8 +82,10 @@
 </head>
 <body class="light-mode">
 
-    <!-- This notification will be updated via JavaScript -->
-    <div id="notification">Loading Gesture Model... Please Wait.</div>
+    <div class="controls-container">
+        <div id="notification">Loading Model...</div>
+        <button id="startButton" disabled>Enable Gesture Control</button>
+    </div>
 
     <!-- The video element is necessary for the webcam feed, but it's hidden from view -->
     <div id="webcam-container">
@@ -66,7 +94,7 @@
 
     <div class="container">
         <h1>An Interactive Web Page</h1>
-        <p>This page looks simple, but it has a secret. Once the gesture model loads, you can control it with your hand! You'll need to allow webcam access when prompted.</p>
+        <p>This page looks simple, but it has a secret. Once the gesture model loads, click the button in the top-right to enable gesture controls. You'll need to allow webcam access when prompted.</p>
         <p><b>Gesture Controls:</b></p>
         <ul>
             <li>👍 <b>Thumb Up:</b> Scroll Down</li>
@@ -77,34 +105,36 @@
         <br/>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
         <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Morbi pellentesque, mauris interdum porta tincidunt, neque orci molestie mauris, vitae iaculis dolor justo vitae magna. Quisque accumsan, quam eget consequat fermentum, lacus ligula venenatis sapien, ut commodo dui massa et metus. Proin vulputate, nunc vel cursus fermentum, nunc mi ultrices diam, at semper est nisi et ante. Fusce ac nulla ac nisi vulputate tincidunt. Suspendisse potenti. Nam pharetra, tortor eu iaculis rhoncus, purus magna congue justo, et iaculis eros libero et erat. In hac habitasse platea dictumst. Praesent sit amet quam. Fusce in enim et neque consequat cursus. Nunc mollis, orci ut semper mollis, lectus nulla varius turpis, non pulvinar urna est in orci. Nam pellentesque, massa in porta volutpat, velit sapien egestas augue, quis consectetuer neque leo et justo.</p>
-        <p>Duis ante. Nulla quam. Nulla facilisi. Praesent vitae magna. Vivamus aliquam, est at adipiscing fringilla, lorem justo consectetuer justo, vel interdum sapien diam ac odio. Cras lorem. Nunc quis mi. In hac habitasse platea dictumst. Vivamus sit amet enim. Integer a nibh. Aenean eget pede. Sed vel nunc. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Curabitur vel eros. Ut vitae erat. Vivamus ac pede. In hac habitasse platea dictumst. Phasellus ac libero. Nulla facilisi. Nulla facilisi. Pellentesque tincidunt. Cras purus. In hac habitasse platea dictumst. Aliquam nec pede.</p>
-        <p>Nullam eu pede. Nam consectetuer, augue et tempor consectetuer, mauris enim consectetuer mauris, vitae scelerisque pede justo ut tellus. Nulla quis justo. Sed consequat, nisl vitae tempus varius, sapien pede lobortis dolor, quis hendrerit purus arcu ac mauris. Etiam ac turpis. Fusce eget tellus. In hac habitasse platea dictumst. Vivamus lacus. Aliquam erat volutpat. Ut nonummy. Proin et arcu. Integer ac leo. Integer consectetuer, elit et consectetuer placerat, nulla nisl iaculis tellus, id consectetuer sapien eros et odio. Praesent nisi. Suspendisse potenti. Nam nonummy. Vivamus vel lorem. Nulla nec pede. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc ut quam. Duis in dolor.</p>
     </div>
 
     <script type="module">
-        import { GestureRecognizer, FilesetResolver, DrawingUtils } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.js";
+        import { GestureRecognizer, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
 
         const video = document.getElementById("webcam");
         const notification = document.getElementById("notification");
+        const startButton = document.getElementById("startButton");
 
         let gestureRecognizer;
         let lastGesture = "";
-        let lastGestureTime = 0;
-        const gestureCooldown = 1000; // 1 second cooldown
+        let enableWebcamButton;
 
-        // Function to update the notification text and fade it out
-        function showNotification(text) {
+        // Function to update the notification text and manage its visibility
+        function showNotification(text, duration = 2000) {
             notification.textContent = text;
             notification.style.opacity = 1;
-            setTimeout(() => {
-                notification.style.opacity = 0;
-            }, 2000); // Fade out after 2 seconds
+            if(duration > 0) {
+                setTimeout(() => {
+                    notification.style.opacity = 0;
+                }, duration);
+            }
         }
+        
+        showNotification("Loading Model...", -1); // Show loading message indefinitely
 
-        // Create and initialize the Gesture Recognizer
-        async function setupGestureRecognizer() {
+        // --- 1. Initialize the Gesture Recognizer ---
+        async function createGestureRecognizer() {
             const vision = await FilesetResolver.forVisionTasks(
-                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
             );
             gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
                 baseOptions: {
@@ -114,45 +144,63 @@
                 runningMode: "VIDEO",
                 numHands: 1
             });
-            showNotification("✅ Model Loaded. Ready for gestures!");
-            enableWebcam();
+            console.log("Gesture recognizer loaded.");
+            notification.style.opacity = 0; // Hide loading message
+            startButton.disabled = false;
+            startButton.style.display = 'block';
         }
-        setupGestureRecognizer();
+        createGestureRecognizer();
+        
+        // --- 2. Add Click Event to the Button ---
+        startButton.addEventListener("click", enableCam);
 
-        // Enable the webcam and start predicting
-        function enableWebcam() {
-            navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-                video.srcObject = stream;
-                video.addEventListener("loadeddata", predictWebcam);
-            }).catch(err => {
-                console.error("getUserMedia error:", err);
-                showNotification("❌ Webcam access denied.");
-            });
+        function enableCam() {
+             if (!gestureRecognizer) {
+                alert("Gesture Recognizer is not ready yet!");
+                return;
+            }
+            // Hide the button and show loading notification
+            startButton.style.display = 'none';
+            showNotification("Activating Webcam...", -1);
+
+            // Get user media stream
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    video.addEventListener("loadeddata", () => {
+                        showNotification("✅ Ready for Gestures!");
+                        predictWebcam();
+                    });
+                })
+                .catch((err) => {
+                    console.error("ERROR: " + err);
+                    showNotification("❌ Webcam access denied.");
+                });
         }
-
+        
+        // --- 3. Start the Prediction Loop ---
         let lastVideoTime = -1;
-        function predictWebcam() {
+        async function predictWebcam() {
             if (video.currentTime !== lastVideoTime) {
                 lastVideoTime = video.currentTime;
                 const results = gestureRecognizer.recognizeForVideo(video, Date.now());
 
                 if (results.gestures.length > 0) {
                     const currentGesture = results.gestures[0][0].categoryName;
-                    const currentTime = Date.now();
-
-                    // Apply a cooldown to prevent rapid-fire gesture changes
-                    if (currentGesture !== lastGesture && currentTime - lastGestureTime > gestureCooldown) {
+                    
+                    if (currentGesture !== lastGesture && currentGesture !== 'None') {
                         handleGesture(currentGesture);
-                        lastGesture = currentGesture;
-                        lastGestureTime = currentTime;
+                        lastGesture = currentGesture; // Update the last recognized gesture
                     }
                 } else {
-                     lastGesture = ""; // Reset if no gesture is detected
+                    lastGesture = ""; // Reset if no hand is detected
                 }
             }
+            // Keep the loop running
             window.requestAnimationFrame(predictWebcam);
         }
 
+        // --- 4. Handle the Detected Gestures ---
         function handleGesture(gesture) {
             let gestureText = "";
             switch (gesture) {
@@ -173,7 +221,7 @@
                     gestureText = "Dark Mode 🖐️";
                     break;
                 default:
-                    return; // Do nothing for unrecognized gestures
+                    return; // Do nothing for other gestures like "None" or "Victory"
             }
             showNotification(gestureText);
         }
