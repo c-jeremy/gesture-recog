@@ -1,132 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaPipe Web 手势识别示例</title>
+    <title>Gesture Controlled Page</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-        video { border: 2px solid #333; transform: scaleX(-1); /* 镜像翻转 */ }
-        .controls { margin-top: 15px; }
-        #liveView { position: relative; width: 640px; height: 480px; }
-        canvas { position: absolute; top: 0; left: 0; transform: scaleX(-1); /* 镜像翻转 */ }
-        #gestureResult { margin-top: 20px; font-size: 1.2em; font-weight: bold; color: #007bff; }
-        .loading { color: gray; }
+        body {
+            font-family: sans-serif;
+            transition: background-color 0.5s, color 0.5s;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Light and Dark Mode Themes */
+        .light-mode {
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        .dark-mode {
+            background-color: #333333;
+            color: #ffffff;
+        }
+
+        /* Notification Styling */
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #ffc107;
+            color: #333;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        /* Hide the video element */
+        #webcam {
+            display: none;
+        }
     </style>
 </head>
-<body>
-    <h1>MediaPipe Web 手势识别</h1>
+<body class="light-mode">
 
-    <div class="controls">
-        <button id="startButton">启动摄像头并开始识别</button>
-        <p id="loadingMessage" class="loading">正在加载模型，请稍候...</p>
-    </div>
+    <div id="notification">Loading Gesture Model...</div>
+    <video id="webcam" autoplay playsinline></video>
 
-    <div id="liveView" style="display: none;">
-        <video id="webcam" autoplay playsinline width="640px" height="480px"></video>
-        <canvas id="outputCanvas" width="640px" height="480px"></canvas>
-    </div>
-
-    <div id="gestureResult">
-        当前手势: <span id="currentGesture">等待识别...</span>
+    <div class="container">
+        <h1>A Seemingly Normal Web Page</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
+        <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Sorbi in harmonicas. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
+        <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Sorbi in harmonicas. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
+        <p>Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam. Sorbi in harmonicas. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.</p>
     </div>
 
     <script type="module">
-        import { GestureRecognizer, FilesetResolver, DrawingUtils } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
-
-        const video = document.getElementById("webcam");
-        const liveView = document.getElementById("liveView");
-        const startButton = document.getElementById("startButton");
-        const currentGestureSpan = document.getElementById("currentGesture");
-        const loadingMessage = document.getElementById("loadingMessage");
-        const canvasElement = document.getElementById("outputCanvas");
-        const canvasCtx = canvasElement.getContext("2d");
-        const drawingUtils = new DrawingUtils(canvasCtx);
+        import { GestureRecognizer, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.js";
 
         let gestureRecognizer;
-        let runningMode = "VIDEO"; // 或者 "IMAGE"
-        let enableWebcam = false;
+        let lastGesture = "";
 
-        // --- 初始化手势识别器 ---
-        const createGestureRecognizer = async () => {
+        const video = document.getElementById("webcam");
+        const notification = document.getElementById("notification");
+
+        async function createGestureRecognizer() {
             const vision = await FilesetResolver.forVisionTasks(
-                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
             );
             gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
                 baseOptions: {
                     modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
-                    delegate: "GPU" // 尝试使用GPU加速，如果不支持会回退到CPU
+                    delegate: "GPU"
                 },
-                runningMode: runningMode,
-                numHands: 2 // 最多识别两只手
+                runningMode: "VIDEO"
             });
-            console.log("手势识别器初始化完成！");
-            loadingMessage.style.display = 'none'; // 隐藏加载消息
-            startButton.disabled = false; // 启用开始按钮
-        };
-
+            notification.textContent = "Ready for gestures!";
+        }
         createGestureRecognizer();
 
-        // --- 启动摄像头和识别 ---
-        startButton.addEventListener("click", () => {
-            if (enableWebcam) {
-                // 如果已经启动了，再次点击可以停止（这里没有实现停止逻辑，只是示例）
-                return;
-            }
-            if (!gestureRecognizer) {
-                console.log("手势识别器尚未加载完成，请稍候！");
-                return;
-            }
-
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function (stream) {
-                        video.srcObject = stream;
-                        video.addEventListener("loadeddata", predictWebcam);
-                        liveView.style.display = 'block'; // 显示视频和画布
-                        startButton.style.display = 'none'; // 隐藏开始按钮
-                        enableWebcam = true;
-                    })
-                    .catch(function (err) {
-                        console.error("无法访问摄像头: " + err);
-                        currentGestureSpan.textContent = "无法访问摄像头，请检查权限。";
-                    });
-            } else {
-                console.error("浏览器不支持 getUserMedia");
-                currentGestureSpan.textContent = "你的浏览器不支持摄像头访问。";
-            }
+        // Get webcam access
+        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+            video.srcObject = stream;
+            video.addEventListener("loadeddata", predictWebcam);
         });
 
-        // --- 实时预测 ---
-        let lastVideoTime = -1;
-        async function predictWebcam() {
-            // 清空画布
-            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-            // 仅在视频帧更新时进行处理
-            if (video.currentTime !== lastVideoTime) {
-                lastVideoTime = video.currentTime;
-
-                const results = gestureRecognizer.recognizeForVideo(video, performance.now());
-
-                if (results.landmarks) {
-                    for (const landmarks of results.landmarks) {
-                        drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 5 });
-                        drawingUtils.drawLandmarks(landmarks, { color: "#FF0000", lineWidth: 2 });
-                    }
-                }
-
+        function predictWebcam() {
+            if (gestureRecognizer) {
+                const results = gestureRecognizer.recognizeForVideo(video, Date.now());
                 if (results.gestures.length > 0) {
-                    const topGesture = results.gestures[0][0]; // 获取置信度最高的手势
-                    currentGestureSpan.textContent = `${topGesture.categoryName} (置信度: ${Math.round(topGesture.score * 100)}%)`;
+                    const currentGesture = results.gestures[0][0].categoryName;
+                    if (currentGesture !== lastGesture) {
+                        handleGesture(currentGesture);
+                        lastGesture = currentGesture;
+                    }
                 } else {
-                    currentGestureSpan.textContent = "未识别到手势";
+                    lastGesture = "";
                 }
             }
+            window.requestAnimationFrame(predictWebcam);
+        }
 
-            // 循环调用自身，实现实时处理
-            if (enableWebcam) {
-                window.requestAnimationFrame(predictWebcam);
+        function handleGesture(gesture) {
+            switch (gesture) {
+                case "Pointing_Up":
+                    window.scrollBy(0, -100);
+                    break;
+                case "Closed_Fist":
+                    document.body.className = "light-mode";
+                    break;
+                case "Open_Palm":
+                    document.body.className = "dark-mode";
+                    break;
+                case "Thumb_Up":
+                    window.scrollBy(0, 100);
+                    break;
             }
         }
     </script>
