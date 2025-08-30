@@ -203,7 +203,7 @@
         function handleGesture(gesture) {
             let gestureText = "";
             switch (gesture) {
-                case "Pointing_Up":
+                case "Thumb_Down":
                     window.scrollBy(0, -300);
                     gestureText = "Scrolling Up ☝️";
                     break;
@@ -211,13 +211,13 @@
                     window.scrollBy(0, 300);
                     gestureText = "Scrolling Down 👍";
                     break;
-                case "Closed_Fist":
-                    document.body.className = "light-mode";
-                    gestureText = "Light Mode ✊";
-                    break;
                 case "Open_Palm":
+                    document.body.className = "light-mode";
+                    gestureText = "Light Mode";
+                    break;
+                case "Closed_Fist":
                     document.body.className = "dark-mode";
-                    gestureText = "Dark Mode 🖐️";
+                    gestureText = "Dark Mode";
                     break;
                 default:
                     return; // Do nothing for other gestures like "None" or "Victory"
